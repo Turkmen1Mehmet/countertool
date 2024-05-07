@@ -78,29 +78,29 @@
             <div class="mounter">
               <h1>TREND</h1>
               <div id="${trendId}">${savedTrend}</div>
-              <button onclick="changeValue('${trendId}', -1, '${totalId}')">-</button>
-              <button onclick="changeValue('${trendId}', 1, '${totalId}')">+</button>
+              <button onclick="changeValue('${trendId}', -1, '${totalId}', event)">-</button>
+              <button onclick="changeValue('${trendId}', 1, '${totalId}', event)">+</button>
             </div>
 
             <div class="mounter">
               <h1>KEY</h1>
               <div id="${keyId}">${savedKey}</div>
-              <button onclick="changeValue('${keyId}', -1, '${totalId}')">-</button>
-              <button onclick="changeValue('${keyId}', 1, '${totalId}')">+</button>
+              <button onclick="changeValue('${keyId}', -1, '${totalId}', event)">-</button>
+              <button onclick="changeValue('${keyId}', 1, '${totalId}', event)">+</button>
             </div>
 
             <div class="mounter">
               <h1>TIME</h1>
               <div id="${timeId}">${savedTime}</div>
-              <button onclick="changeValue('${timeId}', -1, '${totalId}')">-</button>
-              <button onclick="changeValue('${timeId}', 1, '${totalId}')">+</button>
+              <button onclick="changeValue('${timeId}', -1, '${totalId}', event)">-</button>
+              <button onclick="changeValue('${timeId}', 1, '${totalId}', event)">+</button>
             </div>
 
             <div class="mounter">
               <h1>NOS</h1>
               <div id="${nosId}">${savedNos}</div>
-              <button onclick="changeValue('${nosId}', -1, '${totalId}')">-</button>
-              <button onclick="changeValue('${nosId}', 1, '${totalId}')">+</button>
+              <button onclick="changeValue('${nosId}', -1, '${totalId}', event)">-</button>
+              <button onclick="changeValue('${nosId}', 1, '${totalId}', event)">+</button>
             </div>
           </div>
           <h2>Set Total: <span id="${totalId}" class="total">${setTotal}</span></h2><br>
@@ -114,18 +114,27 @@
     }
 
     // Sayaç değerini değiştir ve ilgili set toplamını güncelle
-    function changeValue(id, delta, totalId) {
-      let element = document.getElementById(id);
-      let currentValue = parseInt(element.innerText, 10);
-      let newValue = currentValue + delta;
+    let debounceTimer;
+    function changeValue(id, delta, totalId, event) {
+      event.preventDefault(); // Zoom olayını engelle
 
-      if (newValue < 0) {
-        newValue = 0;
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
       }
 
-      element.innerText = newValue;
-      localStorage.setItem(id, newValue); // Değeri yerel depoda sakla
-      updateSetTotal(totalId);
+      debounceTimer = setTimeout(() => {
+        let element = document.getElementById(id);
+        let currentValue = parseInt(element.innerText, 10);
+        let newValue = currentValue + delta;
+
+        if (newValue < 0) {
+          newValue = 0;
+        }
+
+        element.innerText = newValue;
+        localStorage.setItem(id, newValue); // Değeri yerel depoda sakla
+        updateSetTotal(totalId);
+      }, 50); // 50 ms gecikme ile debouncing
     }
 
     // Girdi alanındaki değeri yerel depoda sakla
@@ -153,7 +162,7 @@
       for (let i = 1; i <= numSets; i++) {
         const trend = parseInt(document.getElementById(`trend-value-${i}`).innerText, 10);
         const key = parseInt(document.getElementById(`key-value-${i}`).innerText, 10);
-        const time = parseInt(document.getElementById(`time-value-${i}`).innerText, 10);
+        const time = parseint(document.getElementById(`time-value-${i}`).innertext, 10);
         const nos = parseInt(document.getElementById(`nos-value-${i}`).innerText, 10);
 
         overallTotal += trend + key + time + nos;
