@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Dynamic Trend Counters with Individual Totals</title>
-<style>
+  <meta charset="UTF-8">
+  <title>Dynamic Trend Counters with Individual Totals</title>
+  <style>
     .input-number {
       font-size: 40px;
       text-align: center;
@@ -23,6 +23,11 @@
     }
     button {
       margin: 5px;
+      padding: 10px 20px; /* Düğme boyutunu büyütmek için dolguyu artırın */
+      font-size: 24px; /* Yazı boyutunu artırın */
+      width: 60px; /* Düğme genişliğini ayarlayın */
+      height: 60px; /* Düğme yüksekliğini ayarlayın */
+      border-radius: 10px; /* Kenarları yuvarlamak için kullanılabilir */
     }
     .total {
       font-size: 40px;
@@ -32,23 +37,23 @@
       font-size: 80px;
       text-align: center;
     }
-</style>
+  </style>
 </head>
 <body>
- 
+
   <center>
-<div id="all-counters"></div> <!-- Dinamik sayaç setleri burada oluşturulacak -->
- 
+    <div id="all-counters"></div> <!-- Dinamik sayaç setleri burada oluşturulacak -->
+
     <div>
-<h1>Overall Total</h1>
-<div id="overall-total">0</div>
-</div>
-</center>
- 
+      <h1>Overall Total</h1>
+      <div id="overall-total">0</div>
+    </div>
+  </center>
+
   <script>
     const numSets = 50; // Kaç tane sayaç seti oluşturulacağı
     const allCounters = document.getElementById('all-counters');
- 
+
     // Tarayıcıda depolanan sayaç ve girdi değerlerini yükle
     function loadState() {
       for (let i = 1; i <= numSets; i++) {
@@ -58,76 +63,76 @@
         const timeId = `time-value-${i}`;
         const nosId = `nos-value-${i}`;
         const totalId = `set-total-${i}`;
- 
+
         const savedTrendadi = localStorage.getItem(trendadiId) || `TREND&KUMAŞ ${i}`;
         const savedTrend = parseInt(localStorage.getItem(trendId), 10) || 0;
         const savedKey = parseInt(localStorage.getItem(keyId), 10) || 0;
         const savedTime = parseInt(localStorage.getItem(timeId), 10) || 0;
         const savedNos = parseInt(localStorage.getItem(nosId), 10) || 0;
         const setTotal = savedTrend + savedKey + savedTime + savedNos;
- 
+
         // Sayaç seti HTML'sini oluştur
         const counterSet = `
-<input type="text" id="${trendadiId}" name="${trendadiId}" value="${savedTrendadi}" class="input-number" oninput="saveInput('${trendadiId}', this.value)"><br>
-<div class="mounter-container">
-<div class="mounter">
-<h1>TREND</h1>
-<div id="${trendId}">${savedTrend}</div>
-<button onclick="changeValue('${trendId}', -1, '${totalId}')">-</button>
-<button onclick="changeValue('${trendId}', 1, '${totalId}')">+</button>
-</div>
- 
+          <input type="text" id="${trendadiId}" name="${trendadiId}" value="${savedTrendadi}" class="input-number" oninput="saveInput('${trendadiId}', this.value)"><br>
+          <div class="mounter-container">
             <div class="mounter">
-<h1>KEY</h1>
-<div id="${keyId}">${savedKey}</div>
-<button onclick="changeValue('${keyId}', -1, '${totalId}')">-</button>
-<button onclick="changeValue('${keyId}', 1, '${totalId}')">+</button>
-</div>
- 
+              <h1>TREND</h1>
+              <div id="${trendId}">${savedTrend}</div>
+              <button onclick="changeValue('${trendId}', -1, '${totalId}')">-</button>
+              <button onclick="changeValue('${trendId}', 1, '${totalId}')">+</button>
+            </div>
+
             <div class="mounter">
-<h1>TIME</h1>
-<div id="${timeId}">${savedTime}</div>
-<button onclick="changeValue('${timeId}', -1, '${totalId}')">-</button>
-<button onclick="changeValue('${timeId}', 1, '${totalId}')">+</button>
-</div>
- 
+              <h1>KEY</h1>
+              <div id="${keyId}">${savedKey}</div>
+              <button onclick="changeValue('${keyId}', -1, '${totalId}')">-</button>
+              <button onclick="changeValue('${keyId}', 1, '${totalId}')">+</button>
+            </div>
+
             <div class="mounter">
-<h1>NOS</h1>
-<div id="${nosId}">${savedNos}</div>
-<button onclick="changeValue('${nosId}', -1, '${totalId}')">-</button>
-<button onclick="changeValue('${nosId}', 1, '${totalId}')">+</button>
-</div>
-</div>
-<h2>Set Total: <span id="${totalId}" class="total">${setTotal}</span></h2><br>
+              <h1>TIME</h1>
+              <div id="${timeId}">${savedTime}</div>
+              <button onclick="changeValue('${timeId}', -1, '${totalId}')">-</button>
+              <button onclick="changeValue('${timeId}', 1, '${totalId}')">+</button>
+            </div>
+
+            <div class="mounter">
+              <h1>NOS</h1>
+              <div id="${nosId}">${savedNos}</div>
+              <button onclick="changeValue('${nosId}', -1, '${totalId}')">-</button>
+              <button onclick="changeValue('${nosId}', 1, '${totalId}')">+</button>
+            </div>
+          </div>
+          <h2>Set Total: <span id="${totalId}" class="total">${setTotal}</span></h2><br>
         `;
- 
+
         // Tüm seti sayfaya ekle
         allCounters.innerHTML += counterSet;
       }
- 
+
       updateOverallTotal(); // Sayfa yüklenirken genel toplam güncellenir
     }
- 
+
     // Sayaç değerini değiştir ve ilgili set toplamını güncelle
     function changeValue(id, delta, totalId) {
       let element = document.getElementById(id);
       let currentValue = parseInt(element.innerText, 10);
       let newValue = currentValue + delta;
- 
+
       if (newValue < 0) {
         newValue = 0;
       }
- 
+
       element.innerText = newValue;
       localStorage.setItem(id, newValue); // Değeri yerel depoda sakla
       updateSetTotal(totalId);
     }
- 
+
     // Girdi alanındaki değeri yerel depoda sakla
     function saveInput(inputId, value) {
       localStorage.setItem(inputId, value);
     }
- 
+
     // Belirtilen sayaç setinin toplamını güncelle
     function updateSetTotal(totalId) {
       const setIndex = totalId.match(/\d+/)[0];
@@ -135,13 +140,13 @@
       const key = parseInt(document.getElementById(`key-value-${setIndex}`).innerText, 10);
       const time = parseInt(document.getElementById(`time-value-${setIndex}`).innerText, 10);
       const nos = parseInt(document.getElementById(`nos-value-${setIndex}`).innerText, 10);
- 
+
       const setTotal = trend + key + time + nos;
       document.getElementById(totalId).innerText = setTotal;
- 
+
       updateOverallTotal(); // Her bir set güncellenince genel toplam da güncellenir
     }
- 
+
     // Tüm sayaç setlerinin toplamını hesapla
     function updateOverallTotal() {
       let overallTotal = 0;
@@ -150,16 +155,16 @@
         const key = parseInt(document.getElementById(`key-value-${i}`).innerText, 10);
         const time = parseInt(document.getElementById(`time-value-${i}`).innerText, 10);
         const nos = parseInt(document.getElementById(`nos-value-${i}`).innerText, 10);
- 
+
         overallTotal += trend + key + time + nos;
       }
- 
+
       document.getElementById('overall-total').innerText = overallTotal;
     }
- 
+
     // Sayfa yüklendiğinde tüm değerleri yükle
     window.onload = loadState;
-</script>
- 
+  </script>
+
 </body>
 </html>
