@@ -4,32 +4,65 @@
   <meta charset="UTF-8">
   <title>Dynamic Trend Counters with Individual Totals</title>
   <style>
-    .input-number {
-      font-size: 40px;
-      text-align: center;
+    body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
     }
+
+    .input-number {
+      font-size: 2vw;
+      text-align: center;
+      width: 80%;
+      max-width: 400px;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
     .mounter-container {
       display: flex;
-      gap: 20px;
+      flex-direction: column;
+      gap: 10px;
       margin-top: 15px;
       justify-content: center;
+      width: 90%;
+      max-width: 500px;
     }
+
+    @media (min-width: 768px) {
+      .mounter-container {
+        flex-direction: row;
+      }
+    }
+
     .mounter {
       border: 1px solid #ddd;
       padding: 10px;
       border-radius: 5px;
       text-align: center;
-      width: 100px;
+      width: 100%;
+      max-width: 120px;
+      flex: 1;
     }
+
     button {
       margin: 5px;
     }
+
     .total {
-      font-size: 40px;
+      font-size: 2vw;
       text-align: center;
     }
+
     #overall-total {
-      font-size: 80px;
+      font-size: 6vw;
       text-align: center;
     }
   </style>
