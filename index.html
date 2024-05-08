@@ -32,6 +32,10 @@
       height: 70px;
       width: 70px;
     }
+    .reset-button {
+      font-size: 20px;
+      margin-left: 10px;
+    }
     .total {
       font-size: 40px;
       text-align: center;
@@ -106,7 +110,8 @@
               <button onclick="changeValue('${nosId}', 1, '${totalId}', event)">+</button>
             </div>
           </div>
-          <h2>Set Total: <span id="${totalId}" class="total">${setTotal}</span></h2><br>
+          <h2>Set Total: <span id="${totalId}" class="total">${setTotal}</span>
+          <button class="reset-button" onclick="resetSet(${i}, '${totalId}')">Reset</button></h2><br>
         `;
 
         // Tüm seti sayfaya ekle
@@ -159,13 +164,35 @@
       updateOverallTotal(); // Her bir set güncellenince genel toplam da güncellenir
     }
 
+    // Bir setin tüm sayaçlarını sıfırla
+    function resetSet(index, totalId) {
+      const trendId = `trend-value-${index}`;
+      const keyId = `key-value-${index}`;
+      const timeId = `time-value-${index}`;
+      const nosId = `nos-value-${index}`;
+
+      // Tüm sayaçları sıfırla ve yerel depolamayı güncelle
+      document.getElementById(trendId).innerText = 0;
+      document.getElementById(keyId).innerText = 0;
+      document.getElementById(timeId).innerText = 0;
+      document.getElementById(nosId).innerText = 0;
+      localStorage.setItem(trendId, 0);
+      localStorage.setItem(keyId, 0);
+      localStorage.setItem(timeId, 0);
+      localStorage.setItem(nosId, 0);
+
+      // Set toplamını güncelle
+      document.getElementById(totalId).innerText = 0;
+      updateOverallTotal(); // Genel toplamı güncelle
+    }
+
     // Tüm sayaç setlerinin toplamını hesapla
     function updateOverallTotal() {
       let overallTotal = 0;
       for (let i = 1; i <= numSets; i++) {
         const trend = parseInt(document.getElementById(`trend-value-${i}`).innerText, 10);
         const key = parseInt(document.getElementById(`key-value-${i}`).innerText, 10);
-        const time = parseint(document.getElementById(`time-value-${i}`).innertext, 10);
+        const time = parseInt(document.getElementById(`time-value-${i}`).innerText, 10);
         const nos = parseInt(document.getElementById(`nos-value-${i}`).innerText, 10);
 
         overallTotal += trend + key + time + nos;
